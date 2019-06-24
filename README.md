@@ -76,4 +76,12 @@ es.addEventListener('sseEnd', (event) => {
 #客户端可主动结束通讯
 es.close()
 ```
+## API
+### Methods
+|   方法明   | 说明 | 参数 |
+| :--: | :--: | ---- |
+|      |      |      |
+| send | 与客户端建立长连接,返回值是 stream对象 | optsions选项<br />options.setResHeader 设置请求头function，required<br />options.sendType once单次 repeat重复 other其他，默认发送一次<br />options.sender 消息发送者，处理什么时候发送消息和结束发送消息，参数sendMsg func，非一次使用<br />options.onceMsg 单次发送消息主体，默认是''<br />options.retry 长连接发送错误时，重试频率，毫秒, 默认10s |
+
+
 
