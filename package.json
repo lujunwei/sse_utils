@@ -1,5 +1,5 @@
 {
-  "name": "sse_utils",
+  "name": "deepexi_sse_utils",
   "version": "0.0.1",
   "description": "server send event",
   "main": "src/index.js",
