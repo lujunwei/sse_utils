@@ -1,0 +1,28 @@
+{
+  "name": "sse_utils",
+  "version": "0.0.1",
+  "description": "server send event 封装",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lujunwei/sse_utlis.git"
+  },
+  "keywords": [
+    "sse"
+  ],
+  "author": "qiye",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lujunwei/sse_utlis/issues"
+  },
+  "homepage": "https://github.com/lujunwei/sse_utlis#readme",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "eventsource": "^1.0.7",
+    "mocha": "^6.1.4"
+  }
+}
