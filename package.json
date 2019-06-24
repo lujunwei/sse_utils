@@ -1,6 +1,6 @@
 {
   "name": "deepexi_sse_utils",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "server send event",
   "main": "src/index.js",
   "scripts": {
@@ -19,8 +19,7 @@
     "url": "https://github.com/lujunwei/sse_utlis/issues"
   },
   "homepage": "https://github.com/lujunwei/sse_utlis#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "eventsource": "^1.0.7",
     "mocha": "^6.1.4"
