@@ -1,6 +1,8 @@
 # deepexi_sse_utlis
 与客户端建立长连接，解决需要需要轮询的困境。与webscoket不同的是，sse只是http协议，且只能有服务端发送通讯。
 
+### 注意：node http连接默认2分钟会超时，如服务端连接发送事件的间隔需超过2分钟，需服务端自行处理（设置timeout时间 or 在2分钟的间隔内发送无效事件）
+
 ## how to install
 
 ```sh
