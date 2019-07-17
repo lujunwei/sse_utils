@@ -42,7 +42,12 @@ class SSEUtils {
     });
 
     // 转换流
-    const stream = new PassThrough();
+    const streamOptions = {
+      "highWaterMark": 1024*1024*1024 //默认缓冲区大小
+    }
+    // 增加stream参数
+    const stream = new PassThrough(Object.assign(streamOptions, options.streamOptions));
+
     const endCall = () => {
       stream.write('event: sseEnd\n');
       stream.write('data: \n\n'); // 多发一条信息，是sseEnd事件能成功被接收
