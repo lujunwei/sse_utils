@@ -19,6 +19,7 @@ class SSEUtils {
    * @param {String} options.sender 消息发送者，处理什么时候发送消息和结束发送消息，参数sendMsg func
    * @param {String} options.onceMsg 单次发送消息主体，默认是''
    * @param {Number} options.retry 长连接发送错误时，重试频率，毫秒, 默认10s
+   * @param {RegExp} options.msgReplace 无法处理消息带换行符的情况，提供替换的方式，默认为\r
    * @return {Object} stream 流对象
    */
   static send(options) {
@@ -28,6 +29,7 @@ class SSEUtils {
       sender,
       onceMsg = '',
       retry = 10000,
+      msgReplace = ''
     } = options;
     if (typeof setResHeader !== 'function') {
       throw new Error('请传入setResHeader！');
@@ -48,6 +50,11 @@ class SSEUtils {
     // 增加stream参数
     const stream = new PassThrough(Object.assign(streamOptions, options.streamOptions));
 
+    // 替换换行符
+    const replaceMsg = (msg = '') => {
+      return msg.replace(/\n/g, '\r').replace(/\r/g, msgReplace)
+    }
+
     const endCall = () => {
       stream.write('event: sseEnd\n');
       stream.write('data: \n\n'); // 多发一条信息，是sseEnd事件能成功被接收
@@ -61,7 +68,7 @@ class SSEUtils {
       stream.write(`id: ${+new Date()}\n`); // 消息ID
       stream.write(`retry: ${retry || 10000}\n`); // 重连时间，默认10s
       // 首次发送消息
-      stream.write(`data: ${onceMsg}\n`); // 消息数据
+      stream.write(`data: ${replaceMsg(onceMsg)}`); // 消息数据
       stream.write('\n\n'); // 消息结束
       endCall.call(this);
     };
@@ -72,7 +79,7 @@ class SSEUtils {
         endCall.call(this);
         return;
       }
-      stream.write(`data: ${msg}\n`); // 消息数据
+      stream.write(`data: ${replaceMsg(msg)}`); // 消息数据
       stream.write('\n\n'); // 消息结束
     };
 
