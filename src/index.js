@@ -1,9 +1,9 @@
 /**
  * author:  qiye
  * createTime:    2019-06-12
- * updateTime:    2019-08-06
+ * updateTime:    2019-08-07
  * desc:    sse utils
- * version: 0.0.6
+ * version: 0.0.7
  */
 
 'use strict';
@@ -31,7 +31,7 @@ class SSEUtils {
       onceMsg = '',
       retry = 10000,
       msgReplace = '',
-      finishCb
+      finishCb,
     } = options;
     if (typeof setResHeader !== 'function') {
       throw new Error('请传入setResHeader！');
@@ -47,24 +47,28 @@ class SSEUtils {
 
     // 转换流
     const streamOptions = {
-      "highWaterMark": 1024*1024*1024 //默认缓冲区大小
+      "highWaterMark": 1024*1024*1024, //默认缓冲区大小
     }
     // 增加stream参数
     const stream = new PassThrough(Object.assign(streamOptions, options.streamOptions));
 
     // 替换换行符
     const replaceMsg = (msg = '') => {
-      return msg.replace(/\n/g, '\r').replace(/\r/g, msgReplace)
+      return msg.replace(/\n/g, '\r').replace(/\r/g, msgReplace);
     }
 
     // 监听stream finish事件
     stream.on('finish', () => {
       if (typeof finishCb === 'function') {
-        finishCb.call(this)
+        finishCb.call(this);
       }
     });
 
     const endCall = () => {
+      if (!stream.writable) {
+        return;
+      }
+
       stream.write('event: sseEnd\n');
       stream.write('data: \n\n'); // 多发一条信息，是sseEnd事件能成功被接收
       // 关闭stream
@@ -73,6 +77,10 @@ class SSEUtils {
 
     // 消息发送一次
     const sendOnce = (onceMsg = '') => {
+      if (!stream.writable) {
+        return;
+      }
+
       // 声明消息id合重连时间
       stream.write(`id: ${+new Date()}\n`); // 消息ID
       stream.write(`retry: ${retry || 10000}\n`); // 重连时间，默认10s
@@ -84,6 +92,10 @@ class SSEUtils {
 
     // 其他频率发送消息，msg为sseEnd，则结束发送消息
     const sendMsg = msg => {
+      if (!stream.writable) {
+        return;
+      }
+      
       if (msg === 'sseEnd') {
         endCall.call(this);
         return;
