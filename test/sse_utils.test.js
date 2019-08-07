@@ -185,7 +185,7 @@ describe('sse finishCb', function() {
       // 主动关闭http request
       setTimeout(() => {
         server.close();
-      }, 100);
+      }, 200);
     });
   });
 
@@ -205,7 +205,56 @@ describe('sse finishCb', function() {
       // 主动关闭http request
       setTimeout(() => {
         server.close();
-      }, 100);
+      }, 200);
+    });
+  });
+});
+
+describe('sse error', function() {
+  it('should error when send msg do not provide setResHeader option', function(done) {
+    createServer(function(err, server) {
+      if (err) return done(err);
+
+      let errorFlag = false;
+      server.on('request', (req, res) => {
+        try {
+          const stream = SSEUtils.send({
+            sendType: 'other',
+          });
+          res.body = stream.pipe(res);
+        } catch (e) {
+          errorFlag = true;
+          assert.equal(true, errorFlag);
+          done();
+        }
+      });
+      const es = new EventSource(server.url);
+      es.onmessage = () => {};
+    });
+  });
+
+  it('should error when send other type msg do not provide sender option', function(done) {
+    createServer(function(err, server) {
+      if (err) return done(err);
+
+      let errorFlag = false;
+      server.on('request', (req, res) => {
+        try {
+          const stream = SSEUtils.send({
+            setResHeader: resHeaders => {
+              res.writeHead(200, resHeaders);
+            },
+            sendType: 'other',
+          });
+          res.body = stream.pipe(res);
+        } catch (e) {
+          errorFlag = true;
+          assert.equal(true, errorFlag);
+          done();
+        }
+      });
+      const es = new EventSource(server.url);
+      es.onmessage = () => {};
     });
   });
 });
