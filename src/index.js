@@ -3,7 +3,7 @@
  * createTime:    2019-06-12
  * updateTime:    2019-08-07
  * desc:    sse utils
- * version: 0.0.7
+ * version: 0.0.8
  */
 
 'use strict';
