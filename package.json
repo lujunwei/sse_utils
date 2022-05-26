@@ -21,7 +21,7 @@
   "homepage": "https://github.com/lujunwei/sse_utlis#readme",
   "dependencies": {},
   "devDependencies": {
-    "eventsource": "^1.0.7",
+    "eventsource": "^2.0.2",
     "mocha": "^6.1.4"
   }
 }
